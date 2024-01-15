@@ -14,7 +14,6 @@
 * git clone 후 구현합니다.
 * main branch를 기준으로  feature/{학번} branch를 생성하여 진행합니다.
 ** ex) feature/JBDJ01-001, feature/JBDJ01-002, ...
-* 학번으로 생성한 branch를 origin에 push 합니다.(push는 2번이상 할 수 없습니다.)
 
 == Test Code
 * ** com.nhnacademy.shoppingmall.check 하위 package에 Test Code를 작성하지 않습니다. **
