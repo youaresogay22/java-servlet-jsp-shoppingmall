@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.thread.request;
 
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class ChannelRequest {
@@ -9,7 +10,7 @@ public abstract class ChannelRequest {
     protected ChannelRequest(){
         requestId = ID_GENERATOR.incrementAndGet();
     }
-    public abstract void execute();
+    public abstract void execute() throws SQLException;
 
     @Override
     public String toString() {
