@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -91,7 +92,7 @@ class UserServiceImplTest {
 
     @Test
     @DisplayName("login - success")
-    void doLogin() {
+    void doLogin() throws SQLException {
         Mockito.when(userRepository.findByUserIdAndUserPassword(anyString(),anyString())).thenReturn(Optional.ofNullable(testUser));
         Mockito.when(userRepository.updateLatestLoginAtByUserId(anyString(),any())).thenReturn(1);
 
@@ -104,7 +105,7 @@ class UserServiceImplTest {
 
     @Test
     @DisplayName("login fail")
-    void doLogin_fail(){
+    void doLogin_fail() throws SQLException {
         Mockito.when(userRepository.findByUserIdAndUserPassword(anyString(),anyString())).thenReturn(Optional.empty());
         Assertions.assertThrows(UserNotFoundException.class,()->userService.doLogin(testUser.getUserId(), testUser.getUserPassword()));
         Mockito.verify(userRepository,Mockito.times(1)).findByUserIdAndUserPassword(anyString(),anyString());

@@ -2,11 +2,12 @@ package com.nhnacademy.shoppingmall.user.repository;
 
 import com.nhnacademy.shoppingmall.user.domain.User;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UserRepository {
-    Optional<User> findByUserIdAndUserPassword(String userId, String userPassword);
+    Optional<User> findByUserIdAndUserPassword(String userId, String userPassword) throws SQLException;
     Optional<User> findById(String userId);
     int save(User user);
     int deleteByUserId(String userId);

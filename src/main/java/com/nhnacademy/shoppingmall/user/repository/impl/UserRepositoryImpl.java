@@ -14,15 +14,21 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     @Override
-    public Optional<User> findByUserIdAndUserPassword(String userId, String userPassword) {
+    public Optional<User> findByUserIdAndUserPassword(String userId, String userPassword) throws SQLException {
         /*todo#3-1 회원의 아이디와 비밀번호를 이용해서 조회하는 코드 입니다.(로그인)
           해당 코드는 SQL Injection이 발생합니다. SQL Injection이 발생하지 않도록 수정하세요.
          */
         Connection connection = DbConnectionThreadLocal.getConnection();
-        String sql =String.format("select user_id, user_name, user_password, user_birth, user_auth, user_point, created_at, latest_login_at from users where user_id='%s' and user_password ='%s'",
-                userId,
-                userPassword
-        );
+        String sql = "select " +
+                "user_id, user_name, user_password, " +
+                "user_birth, user_auth, user_point, " +
+                "created_at, latest_login_at " +
+                "from users " +
+                "where user_id=? and user_password=?";
+
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        preparedSql.setString(1, userId);
+        preparedSql.setString(2, userPassword);
 
         log.debug("sql:{}",sql);
 

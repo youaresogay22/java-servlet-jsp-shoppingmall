@@ -4,6 +4,8 @@ package com.nhnacademy.shoppingmall.thread.worker;
 import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.thread.request.ChannelRequest;
 
+import java.sql.SQLException;
+
 public class WorkerThread extends Thread{
     private final RequestChannel requestChannel;
 
@@ -18,6 +20,8 @@ public class WorkerThread extends Thread{
                 ChannelRequest channelRequest = requestChannel.getRequest();
                 channelRequest.execute();
             } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
