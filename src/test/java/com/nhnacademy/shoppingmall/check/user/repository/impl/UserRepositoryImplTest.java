@@ -25,6 +25,7 @@ class UserRepositoryImplTest {
     void setUp() throws SQLException {
         DbConnectionThreadLocal.initialize();
         testUser = new User("nhnacademy-test-user","nhn아카데미","nhnacademy-test-password","19900505", User.Auth.ROLE_USER,100_0000,LocalDateTime.now(),null);
+        log.debug("BEFORE:{}", DbConnectionThreadLocal.getConnection());
         userRepository.save(testUser);
     }
 
@@ -37,7 +38,7 @@ class UserRepositoryImplTest {
     @Test
     @Order(1)
     @DisplayName("로그인: user 조회 by userId and userPassword")
-    void findByUserIdAndUserPassword() throws SQLException {
+    void findByUserIdAndUserPassword() {
         Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(testUser.getUserId(),testUser.getUserPassword());
         Assertions.assertEquals(testUser,userOptional.get());
     }
@@ -45,8 +46,7 @@ class UserRepositoryImplTest {
     @Test
     @Order(2)
     @DisplayName("로그인 : sql injection 방어")
-    @Disabled
-    void findByUserIdAndUserPassword_sql_injection() throws SQLException {
+    void findByUserIdAndUserPassword_sql_injection() {
         //테스트 코드가 통과할 수 있도록  userRepository.findByUserIdAndUserPassword를 수정하세요.
         String password="' or '1'='1";
         Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(testUser.getUserId(),password);
@@ -57,7 +57,7 @@ class UserRepositoryImplTest {
     @Test
     @Order(3)
     @DisplayName("user 조회 by uerId")
-    void findById() {
+    void findById() throws SQLException {
         Optional<User> userOptional = userRepository.findById(testUser.getUserId());
         Assertions.assertEquals(testUser,userOptional.get());
     }
