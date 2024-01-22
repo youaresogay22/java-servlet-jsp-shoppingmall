@@ -25,7 +25,6 @@ class UserRepositoryImplTest {
     void setUp() throws SQLException {
         DbConnectionThreadLocal.initialize();
         testUser = new User("nhnacademy-test-user","nhn아카데미","nhnacademy-test-password","19900505", User.Auth.ROLE_USER,100_0000,LocalDateTime.now(),null);
-        log.debug("BEFORE:{}", DbConnectionThreadLocal.getConnection());
         userRepository.save(testUser);
     }
 

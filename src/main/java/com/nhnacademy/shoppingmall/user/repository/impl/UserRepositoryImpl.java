@@ -67,25 +67,17 @@ public class UserRepositoryImpl implements UserRepository {
             return psmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (DbConnectionThreadLocal.getConnection().isClosed()) {
-                    DbConnectionThreadLocal.reset();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public int deleteByUserId(String userId) {
         //todo#3-4 회원삭제, executeUpdate()을 반환합니다.
+        Connection connection = DbConnectionThreadLocal.getConnection();
         String sql = "DELETE FROM users " +
                 "WHERE user_id = ?";
 
         try {
-            Connection connection = DbConnectionThreadLocal.getConnection();
             PreparedStatement psmt = connection.prepareStatement(sql);
             psmt.setString(1, userId);
             log.debug("DELETE sql:{}", psmt);
@@ -93,27 +85,19 @@ public class UserRepositoryImpl implements UserRepository {
             return psmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (DbConnectionThreadLocal.getConnection().isClosed()) {
-                    DbConnectionThreadLocal.reset();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public int update(User user) {
         //todo#3-5 회원수정, executeUpdate()을 반환합니다.
+        Connection connection = DbConnectionThreadLocal.getConnection();
         String sql = "UPDATE users " +
                 "SET user_name=?, user_password=?, users.user_birth=?, " +
                 "users.user_auth=?, users.user_point=? " +
                 "WHERE user_id=?";
 
         try {
-            Connection connection = DbConnectionThreadLocal.getConnection();
             PreparedStatement psmt = connection.prepareStatement(sql);
             psmt.setString(1, user.getUserName());
             psmt.setString(2, user.getUserPassword());
@@ -127,26 +111,18 @@ public class UserRepositoryImpl implements UserRepository {
             return psmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (DbConnectionThreadLocal.getConnection().isClosed()) {
-                    DbConnectionThreadLocal.reset();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public int updateLatestLoginAtByUserId(String userId, LocalDateTime latestLoginAt) {
         //todo#3-6, 마지막 로그인 시간 업데이트, executeUpdate()을 반환합니다.
+        Connection connection = DbConnectionThreadLocal.getConnection();
         String sql = "UPDATE users " +
                 "SET latest_login_at=? " +
                 "WHERE user_id=?";
-
         try {
-            Connection connection = DbConnectionThreadLocal.getConnection();
+
             PreparedStatement psmt = connection.prepareStatement(sql);
             psmt.setTimestamp(1, Timestamp.valueOf(latestLoginAt));
             psmt.setString(2, userId);
@@ -156,14 +132,6 @@ public class UserRepositoryImpl implements UserRepository {
             return psmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (DbConnectionThreadLocal.getConnection().isClosed()) {
-                    DbConnectionThreadLocal.reset();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
@@ -186,14 +154,6 @@ public class UserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (DbConnectionThreadLocal.getConnection().isClosed()) {
-                    DbConnectionThreadLocal.reset();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
         return 0;
     }
@@ -223,14 +183,6 @@ public class UserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (DbConnectionThreadLocal.getConnection().isClosed()) {
-                    DbConnectionThreadLocal.reset();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
         return Optional.empty();
     }
@@ -257,14 +209,6 @@ public class UserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (DbConnectionThreadLocal.getConnection().isClosed()) {
-                    DbConnectionThreadLocal.reset();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
         return Optional.empty();
     }
