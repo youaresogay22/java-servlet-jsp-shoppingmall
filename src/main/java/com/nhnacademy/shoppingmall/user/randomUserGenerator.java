@@ -1,4 +1,4 @@
-package com.nhnacademy.shoppingmall;
+package com.nhnacademy.shoppingmall.user;
 
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.user.domain.User;
