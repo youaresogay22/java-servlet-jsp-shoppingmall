@@ -6,9 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,7 +39,7 @@ public class ControllerFactory {
             for (Class<?> some_classes_in_set : c) {
                 BaseController baseController = (BaseController) some_classes_in_set.getDeclaredConstructor().newInstance();
                 RequestMapping annotation = some_classes_in_set.getAnnotation(RequestMapping.class);
-                log.debug("기열 어노테이션:{}", (Object) annotation);
+                log.debug("기열 어노테이션:{}", annotation);
 
                 for (String value : annotation.value()) {
                     beanMap.put(getKey(annotation.method().toString(), value), baseController);
