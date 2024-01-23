@@ -13,9 +13,8 @@ import java.io.IOException;
         }
 )
 
-public class CharacterEncodingFilter  implements Filter {
+public class CharacterEncodingFilter implements Filter {
     private String encoding;
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
