@@ -38,20 +38,19 @@ public class DbConnectionThreadLocal {
 
     public static void reset() throws SQLException {
         //todo#2-4 사용이 완료된 connection은 close를 호출하여 connection pool에 반환합니다.
-        if (connectionThreadLocal.get().isClosed()) {
-            connectionThreadLocal.get().close();
-        }
-
-        //todo#2-5, 2-6
-        if (!sqlErrorThreadLocal.get()) {//todo#2-6 getSqlError() 에러가 존재하지 않으면 commit 합니다.
-            try {
-                connectionThreadLocal.get().commit();
-            } catch (SQLException e){//todo#2-5 getSqlError() 에러가 존재하면 rollback 합니다.
-                connectionThreadLocal.get().rollback();
+        try (Connection conn = connectionThreadLocal.get()) {
+            //todo#2-5, 2-6
+            if (!sqlErrorThreadLocal.get()) {//todo#2-6 getSqlError() 에러가 존재하지 않으면 commit 합니다.
+                try {
+                    connectionThreadLocal.get().commit();
+                } catch (SQLException e) {//todo#2-5 getSqlError() 에러가 존재하면 rollback 합니다.
+                    connectionThreadLocal.get().rollback();
+                }
             }
+        } finally {
+            //todo#2-7 현재 사용하고 있는 connection을 재 사용할 수 없도록 connectionThreadLocal을 초기화 합니다.
+            connectionThreadLocal.remove();
         }
 
-        //todo#2-7 현재 사용하고 있는 connection을 재 사용할 수 없도록 connectionThreadLocal을 초기화 합니다.
-        connectionThreadLocal.remove();
     }
 }

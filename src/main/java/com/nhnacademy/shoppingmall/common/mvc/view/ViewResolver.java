@@ -39,17 +39,16 @@ public class ViewResolver {
     public String getRedirectUrl(String viewName){
         //todo#6-3 REDIRECT_PREFIX를 제외한 url을 반환 합니다.
         if (isRedirect(viewName)) {
-            return viewName.substring(9);
+            return viewName.substring(REDIRECT_PREFIX.length());
         } else return viewName;
     }
 
     public String getLayOut(String viewName){
-
         /*todo#6-4 viewName에
            /admin/경로가 포함되었다면 DEFAULT_ADMIN_LAYOUT 반환 합니다.
            /admin/경로가 포함되어 있지않다면 DEFAULT_SHOP_LAYOUT 반환 합니다.
         */
-        if (viewName.contains("/admin/")) {
+        if (StringUtils.containsIgnoreCase(viewName, "/admin/")) {
             return DEFAULT_ADMIN_LAYOUT;
         } else return DEFAULT_SHOP_LAYOUT;
     }

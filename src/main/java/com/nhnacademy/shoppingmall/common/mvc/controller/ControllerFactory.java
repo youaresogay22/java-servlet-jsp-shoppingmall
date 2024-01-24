@@ -39,7 +39,7 @@ public class ControllerFactory {
             for (Class<?> some_classes_in_set : c) {
                 BaseController baseController = (BaseController) some_classes_in_set.getDeclaredConstructor().newInstance();
                 RequestMapping annotation = some_classes_in_set.getAnnotation(RequestMapping.class);
-                log.debug("기열 어노테이션:{}", annotation);
+                log.debug("annotations: {}", annotation);
 
                 for (String value : annotation.value()) {
                     beanMap.put(getKey(annotation.method().toString(), value), baseController);

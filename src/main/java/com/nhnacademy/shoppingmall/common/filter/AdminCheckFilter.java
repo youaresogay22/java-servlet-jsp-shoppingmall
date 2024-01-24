@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @Slf4j
 @WebFilter(
         filterName = "adminCheckFilter",
-        urlPatterns = "/*"
+        urlPatterns = "/admin/*"
 )
 
 public class AdminCheckFilter extends HttpFilter {
@@ -23,7 +23,9 @@ public class AdminCheckFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         //todo#11 /admin/ 하위 요청은 관리자 권한의 사용자만 접근할 수 있습니다. ROLE_USER가 접근하면 403 Forbidden 에러처리
+        log.debug("hello a.check filter: {}", req.getRequestURI());
         if (isAdminPath(req.getRequestURI())) {
+            log.debug("a.check filter:");
             HttpSession session = req.getSession(false);
             String role = (String) req.getAttribute("user_auth");
             if (session == null || role.equals("ROLE_USER")) {
