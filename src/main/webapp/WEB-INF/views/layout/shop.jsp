@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" session="false" trimDirectiveWhitespaces="true" %>
+<%@ page import="com.mysql.cj.Session" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" session="true" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!doctype html>
@@ -15,7 +16,6 @@
 
 </head>
 <body>
-
     <div class="mainContainer">
         <header class="p-3 bg-dark text-white">
             <div class="container">
@@ -26,6 +26,11 @@
                     </a>
 
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <%--                        <c:choose>--%>
+                        <%--                            <c:when test="${empty sessionScope.loggedInAsUserId}">--%>
+
+                        <%--                            </c:when>--%>
+                        <%--                        </c:choose>--%>
                         <li><a href="/index.do" class="nav-link px-2 text-secondary">Home</a></li>
                         <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
                     </ul>
@@ -35,7 +40,18 @@
                     </form>
 
                     <div class="text-end">
-                        <a class="btn btn-outline-light me-2" href="/login.do" >로그인</a>
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.loggedInAsUserId}">
+                                <form style=display:inline-block;" method="post" action="/logout.do">
+                                    <button class="btn btn-outline-light me-2">
+                                        로그아웃
+                                    </button>
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="btn btn-outline-light me-2" href="/login.do">로그인</a>
+                            </c:otherwise>
+                        </c:choose>
                         <a class="btn btn-warning" href="signup.do" >회원가입</a>
                     </div>
                 </div>
