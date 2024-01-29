@@ -1,6 +1,7 @@
 package com.nhnacademy.shoppingmall.user.repository.impl;
 
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,15 +10,16 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByUserIdAndUserPassword(String userId, String userPassword) {
-        /*todo#3-1 회원의 아이디와 비밀번호를 이용해서 조회하는 코드 입니다.(로그인)
-          해당 코드는 SQL Injection이 발생합니다. SQL Injection이 발생하지 않도록 수정하세요.
-         */
+//      todo#3-1 회원의 아이디와 비밀번호를 이용해서 조회하는 코드 입니다.(로그인)
+//      해당 코드는 SQL Injection이 발생합니다. SQL Injection이 발생하지 않도록 수정하세요.
 
         String sql = "SELECT *" +
                 "FROM users " +
@@ -32,7 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findById(String userId) {
         //todo#3-2 회원조회
-        String sql = "SELECT *" +
+        String sql = "SELECT * " +
                 "FROM users " +
                 "WHERE user_id=?";
 
@@ -136,11 +138,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    //수정1: WHERE user_id=? 대신 user_id LIKE를 사용하여 totalcount 대신 사용할 수 있습니다.(파라미터: "%"사용)
     public int countByUserId(String userId) {
         //todo#3-7 userId와 일치하는 회원의 count를 반환합니다.
+
         String sql = "SELECT count(*) AS count " +
                 "FROM users " +
-                "WHERE user_id=?";
+                "WHERE user_id LIKE ?";
 
         try {
             Connection connection = DbConnectionThreadLocal.getConnection();
@@ -212,4 +216,52 @@ public class UserRepositoryImpl implements UserRepository {
         }
         return Optional.empty();
     }
+
+    Page<User> findAll(int page, int pageSize) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        ResultSet rs = null;
+
+        int offset = (page - 1) * pageSize;
+        int limit = pageSize;
+
+        String sql = "SELECT user_id, user_name, user_birth, " +
+                "user_auth, user_point, created_at, latest_login_at " +
+                "FROM users order by user_id desc limit ?,?";
+
+        try {
+            PreparedStatement psmt = connection.prepareStatement(sql);
+            psmt.setInt(1, offset);
+            psmt.setInt(2, limit);
+            rs = psmt.executeQuery();
+
+            List<User> userList = new ArrayList<>(pageSize);
+
+            while (rs.next()) {
+                userList.add(
+                        new User(
+                                rs.getString("user_id"),
+                                rs.getString("user_name"),
+                                "**비밀**",
+                                rs.getString("user_birth"),
+                                User.Auth.valueOf(rs.getString("user_auth")),
+                                rs.getInt("user_point"),
+                                rs.getTimestamp("created_at").toLocalDateTime(),
+                                rs.getTimestamp("latest_login_at").toLocalDateTime()
+                        )
+                );
+            }
+
+            long total = 0;
+
+            if (!userList.isEmpty()) {
+                // size>0 조회 시도, 0이면 조회할 필요 없음, count query는 자원을 많이 소모하는 작업
+                total = countByUserId("%");
+            }
+
+            return new Page<User>(userList, total);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

@@ -26,13 +26,14 @@
                     </a>
 
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <%--                        <c:choose>--%>
-                        <%--                            <c:when test="${empty sessionScope.loggedInAsUserId}">--%>
-
-                        <%--                            </c:when>--%>
-                        <%--                        </c:choose>--%>
-                        <li><a href="/index.do" class="nav-link px-2 text-secondary">Home</a></li>
-                        <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
+                        <li><a class="nav-link px-2 text-secondary" href="/index.do">Home</a></li>
+                        <li><a class="nav-link px-2 text-white" href="/mypage.do">마이페이지</a></li>
+                        <c:choose>
+                            <c:when test="${sessionScope.userAuth =='ROLE_ADMIN'}">
+                                <li><a class="nav-link px-2 text-white" href="/admin.do">관리</a></li>
+                            </c:when>
+                            <%--                            <c:otherwise></c:otherwise>--%>
+                        </c:choose>
                     </ul>
 
                     <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -47,12 +48,14 @@
                                         로그아웃
                                     </button>
                                 </form>
+                                <a class="btn btn-warning" href="signout.do">회원탈퇴</a>
                             </c:when>
+
                             <c:otherwise>
                                 <a class="btn btn-outline-light me-2" href="/login.do">로그인</a>
+                                <a class="btn btn-warning" href="signup.do">회원가입</a>
                             </c:otherwise>
                         </c:choose>
-                        <a class="btn btn-warning" href="signup.do" >회원가입</a>
                     </div>
                 </div>
             </div>

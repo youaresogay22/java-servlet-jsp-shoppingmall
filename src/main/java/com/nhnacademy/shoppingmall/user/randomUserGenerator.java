@@ -62,7 +62,7 @@ public class randomUserGenerator {
         Connection testconn = DbConnectionThreadLocal.getConnection();
         PreparedStatement preparedSql = testconn.prepareStatement(sql);
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 20; i++) {
             User randomUser = new User(
                     RandomStringUtils.randomAlphanumeric(10),
                     RandomStringUtils.randomAlphabetic(7) + " " + RandomStringUtils.randomAlphabetic(6),
