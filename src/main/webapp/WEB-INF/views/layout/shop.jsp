@@ -29,10 +29,9 @@
                         <li><a class="nav-link px-2 text-secondary" href="/index.do">Home</a></li>
                         <li><a class="nav-link px-2 text-white" href="/mypage.do">마이페이지</a></li>
                         <c:choose>
-                            <c:when test="${sessionScope.userAuth =='ROLE_ADMIN'}">
+                            <c:when test="${not empty sessionScope.loggedInAsUserId and sessionScope.userAuth == 'ROLE_ADMIN'}">
                                 <li><a class="nav-link px-2 text-white" href="/admin.do">관리</a></li>
                             </c:when>
-                            <%--                            <c:otherwise></c:otherwise>--%>
                         </c:choose>
                     </ul>
 

@@ -139,6 +139,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     //수정1: WHERE user_id=? 대신 user_id LIKE를 사용하여 totalcount 대신 사용할 수 있습니다.(파라미터: "%"사용)
+    //수정2: 되긴 하지만 관리자/사용자 검색을 위해 그냥 새거 만들었습니다.
     public int countByUserId(String userId) {
         //todo#3-7 userId와 일치하는 회원의 count를 반환합니다.
 
@@ -217,23 +218,24 @@ public class UserRepositoryImpl implements UserRepository {
         return Optional.empty();
     }
 
-    Page<User> findAll(int page, int pageSize) {
+    public Page<User> findAll(int page, int pageSize, String auth) {
         Connection connection = DbConnectionThreadLocal.getConnection();
         ResultSet rs = null;
-
         int offset = (page - 1) * pageSize;
         int limit = pageSize;
 
-        String sql = "SELECT user_id, user_name, user_birth, " +
-                "user_auth, user_point, created_at, latest_login_at " +
-                "FROM users order by user_id desc limit ?,?";
+        String sql = "SELECT * " +
+                "FROM users " +
+                "WHERE user_auth = ? " +
+                "ORDER BY created_at DESC LIMIT ?, ?";
 
         try {
             PreparedStatement psmt = connection.prepareStatement(sql);
-            psmt.setInt(1, offset);
-            psmt.setInt(2, limit);
+            psmt.setString(1, auth);
+            psmt.setInt(2, offset);
+            psmt.setInt(3, limit);
+            log.debug("page user query:{}", psmt);
             rs = psmt.executeQuery();
-
             List<User> userList = new ArrayList<>(pageSize);
 
             while (rs.next()) {
@@ -252,10 +254,9 @@ public class UserRepositoryImpl implements UserRepository {
             }
 
             long total = 0;
-
             if (!userList.isEmpty()) {
                 // size>0 조회 시도, 0이면 조회할 필요 없음, count query는 자원을 많이 소모하는 작업
-                total = countByUserId("%");
+                total = countAuth(auth);
             }
 
             return new Page<User>(userList, total);
@@ -264,4 +265,26 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    public int countAuth(String auth) {
+        //userauth와 일치하는 회원의 count를 반환
+
+        String sql = "SELECT count(*) AS count " +
+                "FROM users " +
+                "WHERE user_auth LIKE ?";
+
+        try {
+            Connection connection = DbConnectionThreadLocal.getConnection();
+            PreparedStatement psmt = connection.prepareStatement(sql);
+            psmt.setString(1, auth);
+
+            log.debug("countUser query:{}", psmt);
+            ResultSet rs = psmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
 }

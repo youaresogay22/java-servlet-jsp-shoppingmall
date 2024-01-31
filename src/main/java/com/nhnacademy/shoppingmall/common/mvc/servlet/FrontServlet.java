@@ -50,7 +50,8 @@ public class FrontServlet extends HttpServlet {
                 resp.sendRedirect(redirectUrl);
             }else {
                 String layout = viewResolver.getLayOut(viewName);
-                log.debug("NOT redirect,Url:{}", layout);
+                log.debug("NOT redirect, VIEW :{}", layout);
+                log.debug("NOT redirect, LAYOUT_CONTENT_HOLDER:{}", viewResolver.getPath(viewName));
                 req.setAttribute(ViewResolver.LAYOUT_CONTENT_HOLDER, viewResolver.getPath(viewName));
                 RequestDispatcher rd = req.getRequestDispatcher(layout);
                 rd.include(req, resp);

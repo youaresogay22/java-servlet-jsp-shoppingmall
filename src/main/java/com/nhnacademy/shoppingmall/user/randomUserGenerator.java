@@ -57,21 +57,21 @@ public class randomUserGenerator {
 
         String sql = "INSERT INTO users (user_id, user_name, user_password, " +
                 "user_birth, user_auth, user_point, " +
-                "created_at) " +
-                "VALUES (?,?,?,?,?,?,?)";
+                "created_at, latest_login_at) " +
+                "VALUES (?,?,?,?,?,?,?,?)";
         Connection testconn = DbConnectionThreadLocal.getConnection();
         PreparedStatement preparedSql = testconn.prepareStatement(sql);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             User randomUser = new User(
                     RandomStringUtils.randomAlphanumeric(10),
                     RandomStringUtils.randomAlphabetic(7) + " " + RandomStringUtils.randomAlphabetic(6),
                     RandomStringUtils.randomAlphanumeric(15),
                     stringRandomDate(generateRandomDate()),
-                    User.Auth.ROLE_USER,
+                    User.Auth.ROLE_ADMIN,
                     1_000_000,
                     generateRandomDate(),
-                    null
+                    generateRandomDate()
             );
             preparedSql.setString(1, randomUser.getUserId());
             preparedSql.setString(2, randomUser.getUserName());
@@ -80,6 +80,7 @@ public class randomUserGenerator {
             preparedSql.setString(5, randomUser.getUserAuth().toString());
             preparedSql.setInt(6, randomUser.getUserPoint());
             preparedSql.setTimestamp(7, Timestamp.valueOf(randomUser.getCreatedAt()));
+            preparedSql.setTimestamp(8, Timestamp.valueOf(randomUser.getLatestLoginAt()));
             log.debug("connection:{}", testconn);
             log.debug("sql:{}", preparedSql);
             preparedSql.executeUpdate();
