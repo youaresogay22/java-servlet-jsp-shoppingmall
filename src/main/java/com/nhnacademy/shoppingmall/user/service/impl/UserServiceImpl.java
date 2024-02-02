@@ -1,6 +1,7 @@
 package com.nhnacademy.shoppingmall.user.service.impl;
 
 import com.nhnacademy.shoppingmall.common.page.Page;
+import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
@@ -76,6 +77,10 @@ public class UserServiceImpl implements UserService {
 
     public Page<User> getUserPage(int page, int pageSize, String role) {
         return ((UserRepositoryImpl) userRepository).findAll(page, pageSize, role);
+    }
+
+    public void updateUserPoint(User user, PointChannelRequest request) {
+        ((UserRepositoryImpl) userRepository).updatePointAndSaveDetail(user, request);
     }
 
 }

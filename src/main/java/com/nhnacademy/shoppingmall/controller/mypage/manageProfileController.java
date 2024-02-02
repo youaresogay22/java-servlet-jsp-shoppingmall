@@ -1,17 +1,15 @@
-package com.nhnacademy.shoppingmall.controller.auth;
+package com.nhnacademy.shoppingmall.controller.mypage;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Slf4j
-@RequestMapping(method = RequestMapping.Method.POST, value = "/signupAction.do")
-public class ChangeProfilePostController implements BaseController {
+@RequestMapping(method = RequestMapping.Method.GET, value = {"/manageProfile.do"})
+public class manageProfileController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return null;
+        return "/mypage/user/manage_profile";
     }
 }

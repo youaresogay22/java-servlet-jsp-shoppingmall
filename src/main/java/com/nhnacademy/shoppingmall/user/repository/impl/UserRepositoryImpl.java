@@ -2,6 +2,7 @@ package com.nhnacademy.shoppingmall.user.repository.impl;
 
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
+import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -287,4 +288,42 @@ public class UserRepositoryImpl implements UserRepository {
         }
         return 0;
     }
+
+    //02.01 추가: 포인트 적립 추가 구현
+    public synchronized void updatePointAndSaveDetail(User user, PointChannelRequest request) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        try {
+            String pointSql = "INSERT INTO userpointDetail (userpointDetailID, userID, " +
+                    "userpointchange, userpointchangedate)" +
+                    "VALUES (?,?,?,?)";
+
+            PreparedStatement point_psmt = connection.prepareStatement(pointSql);
+            point_psmt.setString(1, request.getRequestId());
+            point_psmt.setString(2, user.getUserId());
+            point_psmt.setString(3, request.getChangeInfo());
+            point_psmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
+            log.debug("point sql:{}", point_psmt);
+            point_psmt.executeUpdate();
+
+        } catch (SQLException e) {
+            log.debug("ERROR: in point sql");
+            throw new RuntimeException(e);
+        }
+        try {
+            String userSql = "UPDATE users " +
+                    "SET user_point=? " +
+                    "WHERE user_id=?";
+
+            PreparedStatement user_psmt = connection.prepareStatement(userSql);
+            user_psmt.setInt(1, user.getUserPoint());
+            user_psmt.setString(2, user.getUserId());
+            log.debug("point and user sql:{}", user_psmt);
+            user_psmt.executeUpdate();
+
+        } catch (SQLException e) {
+            log.debug("ERROR: in point and user sql");
+            throw new RuntimeException(e);
+        }
+    }
+
 }

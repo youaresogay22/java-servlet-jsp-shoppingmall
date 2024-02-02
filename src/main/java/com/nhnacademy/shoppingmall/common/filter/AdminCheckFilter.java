@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 )
 
 public class AdminCheckFilter extends HttpFilter {
-    private static final String ADMIN_PATH = "/admin";
+    private static final String ADMIN_PATH = "admin";
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         //todo#11 /admin/ 하위 요청은 관리자 권한의 사용자만 접근할 수 있습니다. ROLE_USER가 접근하면 403 Forbidden 에러처리

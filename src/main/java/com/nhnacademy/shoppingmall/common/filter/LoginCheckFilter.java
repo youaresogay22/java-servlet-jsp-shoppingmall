@@ -15,25 +15,31 @@ import java.io.IOException;
 @Slf4j
 @WebFilter(
         filterName = "loginCheckFilter",
-        urlPatterns = "/mypage/*"
+        urlPatterns = {"/mypage/*", "/mypage.do"}
 )
 
 public class LoginCheckFilter extends HttpFilter {
-    private static final String LOG_ON_PATH = "/mypage/";
+    private static final String MYPAGE_PATH = "mypage";
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         //todo#10 /mypage/ 하위경로의 접근은 로그인한 사용자만 접근할 수 있습니다.
-        log.debug("hello l.check filter: {}", req.getRequestURI());
+        log.debug("hello l.check filter: {}/{}", req.getRequestURI(), req.getSession(false));
+
         if (isMypagePath(req.getRequestURI())) {
-            log.debug("l.check filter:");
             HttpSession session = req.getSession(false);
-            if (session == null) {
+
+            if (session != null) {
+                log.debug("hello l.check filter: {}", session.getAttribute("loggedInAsUserId"));
+                if (session.getAttribute("loggedInAsUserId") != null) {
+                    chain.doFilter(req, res);
+                } else
+                    res.sendRedirect("/index.do");
+            } else
                 res.sendRedirect("/index.do");
-            }
-        } else chain.doFilter(req, res);
+        }
     }
 
     public boolean isMypagePath(String uri) {
-        return StringUtils.containsIgnoreCase(uri, LOG_ON_PATH);
+        return StringUtils.containsIgnoreCase(uri, MYPAGE_PATH);
     }
 }
