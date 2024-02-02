@@ -12,9 +12,9 @@
 </head>
 <body>
 <h1>마이 페이지인 레후</h1>
-<a href="manageProfile.do">정보수정</a>
-<a href="manageOrderDetail.do">주문상세 조회</a>
-<a href="managePointDetail.do">포인트 사용 내역 조회</a>
+<a href="manageProfile.do">정보수정</a><br>
+<a href="manageOrderDetail.do">주문상세 조회</a><br>
+<a href="managePointDetail.do">포인트 사용/적립 내역 조회</a><br>
 <a href="manageAddress.do">주소 관리</a>
 </body>
 </html>

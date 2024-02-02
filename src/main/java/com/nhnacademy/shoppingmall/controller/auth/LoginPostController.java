@@ -6,6 +6,7 @@ import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
+import com.nhnacademy.shoppingmall.user.pointdetail.domain.PointDetail;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
 import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
@@ -42,9 +43,10 @@ public class LoginPostController implements BaseController {
                 session.setMaxInactiveInterval(60 * 60);
 
                 //02.01: 포인트 적립 구현
+                //02.02: pointdetail class 사용하도록 수정
                 try {
                     if (isPointAddable(user.getLatestLoginAt())) {
-                        PointChannelRequest request = new PointChannelRequest(user, "매일 첫 로그인 10,000P 적립", 10_000);
+                        PointChannelRequest request = new PointChannelRequest(user, PointDetail.changeInfo.DAILY_FIRST_LOGIN, 10_000);
                         RequestChannel requestchannel = (RequestChannel) req.getServletContext().getAttribute("requestChannel");
                         requestchannel.addRequest(request);
                     }

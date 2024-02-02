@@ -290,26 +290,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     //02.01 추가: 포인트 적립 추가 구현
-    public synchronized void updatePointAndSaveDetail(User user, PointChannelRequest request) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+    public void updateUserPoint(User user) {
         try {
-            String pointSql = "INSERT INTO userpointDetail (userpointDetailID, userID, " +
-                    "userpointchange, userpointchangedate)" +
-                    "VALUES (?,?,?,?)";
-
-            PreparedStatement point_psmt = connection.prepareStatement(pointSql);
-            point_psmt.setString(1, request.getRequestId());
-            point_psmt.setString(2, user.getUserId());
-            point_psmt.setString(3, request.getChangeInfo());
-            point_psmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
-            log.debug("point sql:{}", point_psmt);
-            point_psmt.executeUpdate();
-
-        } catch (SQLException e) {
-            log.debug("ERROR: in point sql");
-            throw new RuntimeException(e);
-        }
-        try {
+            Connection connection = DbConnectionThreadLocal.getConnection();
             String userSql = "UPDATE users " +
                     "SET user_point=? " +
                     "WHERE user_id=?";

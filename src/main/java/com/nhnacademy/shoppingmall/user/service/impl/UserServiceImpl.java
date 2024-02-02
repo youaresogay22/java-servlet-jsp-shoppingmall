@@ -79,8 +79,8 @@ public class UserServiceImpl implements UserService {
         return ((UserRepositoryImpl) userRepository).findAll(page, pageSize, role);
     }
 
-    public void updateUserPoint(User user, PointChannelRequest request) {
-        ((UserRepositoryImpl) userRepository).updatePointAndSaveDetail(user, request);
+    public void updateUserPoint(User user) {
+        ((UserRepositoryImpl) userRepository).updateUserPoint(user);
     }
 
 }
