@@ -27,30 +27,39 @@ public class manageProfilePostController implements BaseController {
         if (session != null) {
             try {
                 String id = session.getAttribute("loggedInAsUserId").toString();
+                String pw = req.getParameter("user_password");
                 User user = userService.getUser(id);
 
-                if (user != null) {// requiered field: password
-                    String pw = req.getParameter("userPassword");
-                    String name = req.getParameter("user_name");
-                    log.debug("hello manage profile:{}/{}/{}", id, pw, name);
-
-                    if (pw == null)
-                        return "/mypage/user/manage_profile";
-
-                    if (name == null) {// 이름은 입력하지 않아도 수정가능하므로 체크
-                        User managed_user = new User(id, user.getUserName(), pw, user.getUserBirth(),
-                                user.getUserAuth(), user.getUserPoint(), user.getCreatedAt(), user.getLatestLoginAt());
-                        userService.updateUser(managed_user);
-                    } else {
-                        User managed_user = new User(id, name, pw, user.getUserBirth(),
-                                user.getUserAuth(), user.getUserPoint(), user.getCreatedAt(), user.getLatestLoginAt());
-                        userService.updateUser(managed_user);
-                    }
-                    return "redirect:/mypage.do";
+                if (pw == null) {// pw==null
+                    req.setAttribute("noPassword", true);
+                    return "/mypage/user/manage_profile";
                 }
-                return "/mypage/user/manage_profile"; //user==null
 
-            } catch (UserNotFoundException e) {
+                if (user == null) {// login error
+                    req.setAttribute("wrongPassword", true);
+                    return "/mypage/user/manage_profile";
+                }
+
+                String name = req.getParameter("user_name");
+                log.debug("hello manage profile:{}/{}/{}", id, pw, name);
+
+                User managed_user;
+                if (name == null) {// 이름은 입력하지 않아도 수정가능하므로 체크
+                    managed_user = new User(id, user.getUserName(), pw, user.getUserBirth(),
+                            user.getUserAuth(), user.getUserPoint(), user.getCreatedAt(), user.getLatestLoginAt());
+                } else {
+                    managed_user = new User(id, name, pw, user.getUserBirth(),
+                            user.getUserAuth(), user.getUserPoint(), user.getCreatedAt(), user.getLatestLoginAt());
+                }
+                userService.updateUser(managed_user);
+                //수정 성공한경우 로그인된 세션값 역시 변경
+                session.setAttribute("loggedInAsUserId", managed_user.getUserId());
+                session.setAttribute("userPassword", managed_user.getUserPassword());
+                session.setAttribute("userAuth", managed_user.getUserAuth().toString());
+                //최종변경 이후 마이페이지로
+                return "redirect:/mypage.do";
+
+            } catch (UserNotFoundException e) {//database error
                 log.debug("user find execption");
                 throw new UserNotFoundException("id");
             }

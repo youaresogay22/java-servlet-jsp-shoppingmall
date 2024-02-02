@@ -11,7 +11,16 @@
 <div style="margin: auto; width: 400px;">
     <div class="p-2">
         <form method="post" action="/manageProfileAction.do">
-            <h1 class="h3 mb-3 fw-normal">회원 정보 수정 페이지</h1>
+            <c:choose>
+                <c:when test="${not empty requestScope.noPassword}">
+                    <h1 class="h3 mb-3 fw-normal" style="color: red">비밀번호는 필수 입력 사항입니다.</h1>
+                </c:when>
+
+                <c:otherwise>
+                    <h1 class="h3 mb-3 fw-normal">안녕하세요 ${requestScope.loggedInAsUserId} 님</h1>
+                    <h1 class="h3 mb-3 fw-normal">회원 정보 수정 페이지</h1>
+                </c:otherwise>
+            </c:choose>
 
             <div class="form-floating">
                 <input type="password" name="user_password" class="form-control" id="user_password" placeholder="비밀번호"
