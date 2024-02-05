@@ -1,52 +1,51 @@
-package com.nhnacademy.shoppingmall.controller.manage;
+package com.nhnacademy.shoppingmall.controller.mypage;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.page.PageContainer;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
+import com.nhnacademy.shoppingmall.user.pointdetail.domain.PointDetail;
+import com.nhnacademy.shoppingmall.user.pointdetail.repository.impl.PointDetailRepositoryImpl;
+import com.nhnacademy.shoppingmall.user.pointdetail.service.PointDetailService;
+import com.nhnacademy.shoppingmall.user.pointdetail.service.impl.PointDetailServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+@RequestMapping(method = RequestMapping.Method.GET, value = {"/managePointDetail.do"})
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.GET, value = "/userManage.do")
-public class userManageController implements BaseController {
-
-    private final UserServiceImpl userService = new UserServiceImpl(new UserRepositoryImpl());
+public class PointListController implements BaseController {
+    PointDetailService pointservice = new PointDetailServiceImpl(new PointDetailRepositoryImpl());
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        // 페이지 탐색을 위해 파라미터로 받을 수 있도록 함
-        //HttpSession session = req.getSession(true);
-        String page_admin = req.getParameter("page_admin");
-        String page_user = req.getParameter("page_user");
+        String page_temp = req.getParameter("page_temp");
+        HttpSession session = req.getSession(false);
 
-        setListAttribute(page_admin, page_user, req);
+        if (session != null) {
+            String userId = session.getAttribute("loggedInAsUserId").toString();
+            setListAttribute(page_temp, userId, req);
+            req.setAttribute("userId", userId);
+        }
 
-        return "/shop/main/admin/userlist";
+        return "/mypage/user/pointlist";
     }
 
-    private void setListAttribute(String page_admin, String page_user, HttpServletRequest req) {
-        PageContainer admincontainer = pagination(page_admin, User.Auth.ROLE_ADMIN.toString());
-        PageContainer usercontainer = pagination(page_user, User.Auth.ROLE_USER.toString());
+    private void setListAttribute(String page_temp, String userId, HttpServletRequest req) {
+        PageContainer container = pagination(page_temp, userId);
 
-        req.setAttribute("list_user", usercontainer.getList().getContent());
-        req.setAttribute("startpageno_user", usercontainer.getBlockStartPageNo());
-        req.setAttribute("endpageno_user", usercontainer.getBlockEndPageNo());
-        req.setAttribute("totalpages_user", usercontainer.getTotalPageCount());
-        req.setAttribute("currentpage_user", usercontainer.getCurrentPage());
-
-        req.setAttribute("list_admin", admincontainer.getList().getContent());
-        req.setAttribute("startpageno_admin", admincontainer.getBlockStartPageNo());
-        req.setAttribute("endpageno_admin", admincontainer.getBlockEndPageNo());
-        req.setAttribute("totalpages_admin", admincontainer.getTotalPageCount());
-        req.setAttribute("currentpage_admin", admincontainer.getCurrentPage());
+        req.setAttribute("list", container.getList().getContent());
+        req.setAttribute("startpageno", container.getBlockStartPageNo());
+        req.setAttribute("endpageno", container.getBlockEndPageNo());
+        req.setAttribute("totalpages", container.getTotalPageCount());
+        req.setAttribute("currentpage", container.getCurrentPage());
     }
 
-    private PageContainer pagination(String page, String role) {
+    private PageContainer pagination(String page, String userId) {
         //parameter page= 현재 페이지, request parameter
         //현재 페이지 번호, 페이지당 row 수, 한번에 표시할 페이지 수: 직접 assign하여 사용
         int currentpage, pagesize, blocksize;
@@ -71,7 +70,7 @@ public class userManageController implements BaseController {
         }
 
         // 총 페이지 수 계산
-        totalrowcount = userService.getAuthCount(role);
+        totalrowcount = pointservice.countUser(userId);
         // 총 row/page size 해서 나누어 떨어지면 몫을, 아니면 +1페이지에 나머지를 넣어야 함
         if (totalrowcount % pagesize == 0) {
             totalpagecount = totalrowcount / pagesize;
@@ -102,6 +101,6 @@ public class userManageController implements BaseController {
             blockendpageno = totalpagecount;
         }
         log.debug("page:{}, totalrow:{},pagestartrow:{}, blockstartpage:{}, blockendpageno:{}", page, totalrowcount, pagestartrowno, blockstartpageno, blockendpageno);
-        return new PageContainer(userService.getUserPage(currentpage, pagesize, role), totalpagecount, blockstartpageno, blockendpageno, currentpage);
+        return new PageContainer(pointservice.getAllPageOfUser(currentpage, pagesize, userId), totalpagecount, blockstartpageno, blockendpageno, currentpage);
     }
 }

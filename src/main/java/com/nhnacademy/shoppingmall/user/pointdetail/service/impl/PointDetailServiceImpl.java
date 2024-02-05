@@ -16,36 +16,36 @@ public class PointDetailServiceImpl implements PointDetailService {
 
     @Override
     public int save(PointDetail pointDetail) {
-        return 0;
+        return pointrepository.save(pointDetail);
     }
 
     @Override
     public int deleteLogByLogId(String pointDetailId) {
-        return 0;
+        return pointrepository.deleteByPointDetailId(pointDetailId);
     }
 
     @Override
     public int deleteLogByUserId(String userId) {
-        return 0;
+        return pointrepository.deleteByPointDetailId(userId);
     }
 
     @Override
     public Optional<PointDetail> getLogByDetailId(String pointDetailId) {
-        return Optional.empty();
+        return pointrepository.findByPointDetailId(pointDetailId);
     }
 
     @Override
     public Optional<PointDetail> getLogByUserId(String userId) {
-        return Optional.empty();
+        return pointrepository.findByPointDetailId(userId);
     }
 
     @Override
     public Page<PointDetail> getAllPageOfUser(int page, int pagesize, String userId) {
-        return null;
+        return pointrepository.pageAll(page, pagesize, userId);
     }
 
     @Override
     public int countUser(String userId) {
-        return 0;
+        return pointrepository.countByUserId(userId);
     }
 }

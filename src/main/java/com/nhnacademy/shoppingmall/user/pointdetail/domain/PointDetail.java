@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.function.Function;
 
-@Getter
 public class PointDetail {
+
+
     private final String requestId;
     private final String userId;
     private final changeInfo changeinfo;
@@ -45,6 +46,25 @@ public class PointDetail {
         this.changeDate = changeDate;
     }
 
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public changeInfo getChangeinfo() {
+        return changeinfo;
+    }
+
+    public BigDecimal getChangeAmount() {
+        return changeAmount;
+    }
+
+    public LocalDateTime getChangeDate() {
+        return changeDate;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

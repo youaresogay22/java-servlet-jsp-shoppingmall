@@ -73,7 +73,7 @@ public class PointChannelRequest extends ChannelRequest {
                     BigDecimal.valueOf(value),
                     nowTime
             );
-            user.setUserPoint(pointDetail.getChangeAmount().intValue());
+            user.setUserPoint(user.getUserPoint() + pointDetail.getChangeAmount().intValue());
             this.user = user;
         }
 
