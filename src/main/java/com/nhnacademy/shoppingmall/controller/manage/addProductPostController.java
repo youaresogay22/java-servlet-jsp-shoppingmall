@@ -14,24 +14,19 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.POST, value = "/productManageAction.do")
-public class productManagePostController implements BaseController {
+@RequestMapping(method = RequestMapping.Method.POST, value = "/addProductAction.do")
+public class addProductPostController implements BaseController {
     ProductService productService = new ProductServiceImpl(new ProductRepositoryImpl());
 
     @Override
@@ -52,8 +47,9 @@ public class productManagePostController implements BaseController {
             for (FileItem item : items) {
                 if (item.isFormField()) {
                     map.put(item.getFieldName(), item.getString());
-                } else
+                } else {
                     map.put(item.getFieldName(), item.get());
+                }
             }
         } catch (FileUploadException e) {
             throw new RuntimeException(e);
@@ -76,7 +72,8 @@ public class productManagePostController implements BaseController {
             throw new RuntimeException(e);
         }
 
-        Product product = productService.getProduct("ProductID", id);
+        Product product = productService.getProduct("ID", id);
+        log.debug("findproduct query: {}", product);
 
         try {
             if (product == null) {

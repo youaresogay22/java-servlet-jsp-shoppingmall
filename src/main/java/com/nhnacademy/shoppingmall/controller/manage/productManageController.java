@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class productManageController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return "shop/main/admin/productmanage_form";
+        return "shop/main/admin/productmanage";
     }
 }
 

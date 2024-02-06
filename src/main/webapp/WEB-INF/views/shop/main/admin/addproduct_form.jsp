@@ -3,7 +3,7 @@
 
 <div style="margin: auto; width: 600px;">
     <div class="p-2">
-        <form method="post" action="/productManageAction.do" enctype="multipart/form-data">
+        <form method="post" action="/addProductAction.do" enctype="multipart/form-data" accept-charset="UTF-8">
             <c:choose>
                 <c:when test="${not empty requestScope.duplicateProductId}">
                     <h1 class="h3 mb-3 fw-normal" style="color: red">존재하는 상품 id 입니다.</h1>

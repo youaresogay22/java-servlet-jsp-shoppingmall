@@ -94,17 +94,20 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Optional<Product> findByEverything(String field, String keyword) {
         String sql = "SELECT * " +
-                "FROM Products " +
-                "WHERE ? LIKE ?";
+                "FROM Products ";
         switch (field) {
             case "ID":
-                return findProductQuery(sql, "ProductID", keyword);
+                sql += "WHERE ProductID = ?";
+                return findProductQuery(sql, keyword);
             case "NUMBER":
-                return findProductQuery(sql, "ModelNumber", keyword);
+                sql += "WHERE ModelNumber = ?";
+                return findProductQuery(sql, keyword);
             case "NAME":
-                return findProductQuery(sql, "ModelName", "%" + keyword + "%");
+                sql += "WHERE ModelName LIKE ?";
+                return findProductQuery(sql, "%" + keyword + "%");
             case "DESCRIPTION":
-                return findProductQuery(sql, "Description", "%" + keyword + "%");
+                sql += "WHERE Description LIKE ?";
+                return findProductQuery(sql, "%" + keyword + "%");
             default:
                 return Optional.empty();
         }
@@ -198,11 +201,10 @@ public class ProductRepositoryImpl implements ProductRepository {
         return 0;
     }
 
-    private Optional<Product> findProductQuery(String sql, String field, String keyword) {
+    private Optional<Product> findProductQuery(String sql, String keyword) {
         Connection connection = DbConnectionThreadLocal.getConnection();
         try (PreparedStatement psmt = connection.prepareStatement(sql)) {
-            psmt.setString(1, field);
-            psmt.setString(2, keyword);
+            psmt.setString(1, keyword);
 
             ResultSet rs = psmt.executeQuery();
             log.debug("find product query:{}", psmt);
