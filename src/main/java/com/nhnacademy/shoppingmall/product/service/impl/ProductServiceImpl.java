@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.product.service.impl;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
@@ -14,8 +15,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> getProduct(String field, String keyword) {
-        return productrepository.findByEverything(field, keyword);
+    public Product getProduct(String field, String keyword) {
+        Optional<Product> product = productrepository.findByEverything(field, keyword);
+        return product.orElse(null);
     }
 
     @Override
@@ -31,5 +33,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(String productId) {
         productrepository.deleteByProductId(productId);
+    }
+
+    @Override
+    public int countAllProduct() {
+        return productrepository.countAll();
+    }
+
+    @Override
+    public Page<Product> pageAll(int page, int pageSize) {
+        return productrepository.pageAll(page, pageSize);
     }
 }

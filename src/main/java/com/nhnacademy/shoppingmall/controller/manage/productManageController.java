@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.POST, value = "/userManage.do")
-public class productManage implements BaseController {
+@RequestMapping(method = RequestMapping.Method.GET, value = "/productManage.do")
+public class productManageController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return null;
+        return "shop/main/admin/productmanage_form";
     }
 }
 

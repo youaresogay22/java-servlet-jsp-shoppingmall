@@ -58,17 +58,21 @@ public class FrontServlet extends HttpServlet {
             }
         } catch (Exception e) {
             //todo#7-5 예외가 발생하면 해당 예외에 대해서 적절한 처리를 합니다.
-            req.setAttribute("status_code", req.getAttribute(ERROR_STATUS_CODE));
+            if (req.getAttribute(ERROR_STATUS_CODE) == null) {
+                req.setAttribute("status_code", "500");
+            } else
+                req.setAttribute("status_code", req.getAttribute(ERROR_STATUS_CODE));
+
             req.setAttribute("exception_type", req.getAttribute(ERROR_EXCEPTION_TYPE));
             req.setAttribute("message", req.getAttribute(ERROR_MESSAGE));
             req.setAttribute("exception", req.getAttribute(ERROR_EXCEPTION));
             req.setAttribute("request_uri", req.getAttribute(ERROR_REQUEST_URI));
-            int code = (Integer) req.getAttribute(ERROR_STATUS_CODE);
-            log.error("status_code:{}", code);
+            log.error("status_code:{}", req.getAttribute(ERROR_STATUS_CODE));
 
-            RequestDispatcher rd = req.getRequestDispatcher("/error.jsp");
-            rd.forward(req, resp);
-            resp.sendError(code, code + "ERROR");
+            String layout = viewResolver.getLayOut("/error");
+            log.debug("ERROR, layout :{}", layout);
+            RequestDispatcher rd = req.getRequestDispatcher(layout);
+            rd.include(req, resp);
 
         } finally {
             //todo#7-4 connection을 반납합니다.
@@ -76,7 +80,7 @@ public class FrontServlet extends HttpServlet {
                 log.debug("end front:{}/connection {}", req.getRequestURI(), DbConnectionThreadLocal.getConnection());
                 DbConnectionThreadLocal.reset();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                //throw new RuntimeException(e);
             }
         }
     }

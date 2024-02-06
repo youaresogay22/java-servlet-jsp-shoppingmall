@@ -1,15 +1,24 @@
 package com.nhnacademy.shoppingmall.product.repository;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 
 import java.util.Optional;
 
 public interface ProductRepository {
-    int save(Product product);
+    public int save(Product product);
 
-    int update(Product product);
+    public int update(Product product);
 
-    int deleteByProductId(String productId);
+    public int updateByProductId(String productId);
 
-    Optional<Product> findByEverything(String field, String keyword);
+    public int deleteByProductId(String productId);
+
+    public Optional<Product> findByEverything(String field, String keyword);
+
+    public Page<Product> pageAll(int page, int pageSize);
+
+    public int countAll();
+
+    public int countByProductId(String userId);
 }

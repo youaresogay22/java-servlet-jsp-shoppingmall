@@ -11,6 +11,7 @@ public class ViewResolver {
     public static final String REDIRECT_PREFIX="redirect:";
     public static final String DEFAULT_SHOP_LAYOUT="/WEB-INF/views/layout/shop.jsp";
     public static final String DEFAULT_ADMIN_LAYOUT="/WEB-INF/views/layout/admin.jsp";
+    public static final String DEFAULT_ERROR_LAYOUT = "/WEB-INF/views/layout/error.jsp";
     public static final String LAYOUT_CONTENT_HOLDER = "layout_content_holder";
 
     private final String prefix;
@@ -48,8 +49,11 @@ public class ViewResolver {
            /admin/경로가 포함되었다면 DEFAULT_ADMIN_LAYOUT 반환 합니다.
            /admin/경로가 포함되어 있지않다면 DEFAULT_SHOP_LAYOUT 반환 합니다.
         */
+        //02.06 추가: error 포함되어있으면 error layout 반환
         if (StringUtils.containsIgnoreCase(viewName, "/admin")) {
             return DEFAULT_ADMIN_LAYOUT;
+        } else if (StringUtils.containsIgnoreCase(viewName, "error")) {
+            return DEFAULT_ERROR_LAYOUT;
         } else return DEFAULT_SHOP_LAYOUT;
     }
 }
