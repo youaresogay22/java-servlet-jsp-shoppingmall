@@ -30,8 +30,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             psmt.setString(1, product.getProductId());
             psmt.setString(2, product.getModelNumber());
             psmt.setString(3, product.getModelName());
-            psmt.setBlob(4, product.getProductThumbNail());
-            psmt.setBlob(5, product.getProductImage());
+            psmt.setString(4, product.getProductThumbNail());
+            psmt.setString(5, product.getProductImage());
             psmt.setBigDecimal(6, product.getUnitCost());
             psmt.setInt(7, product.getUnitQuantity());
             psmt.setString(8, product.getProductId());
@@ -55,8 +55,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             PreparedStatement psmt = connection.prepareStatement(sql);
             psmt.setString(1, product.getModelNumber());
             psmt.setString(2, product.getModelName());
-            psmt.setBlob(3, product.getProductThumbNail());
-            psmt.setBlob(4, product.getProductImage());
+            psmt.setString(3, product.getProductThumbNail());
+            psmt.setString(4, product.getProductImage());
             psmt.setBigDecimal(5, product.getUnitCost());
             psmt.setString(6, product.getDescription());
             psmt.setInt(7, product.getUnitQuantity());
@@ -138,8 +138,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                                 rs.getString("ProductID"),
                                 rs.getString("ModelNumber"),
                                 rs.getString("ModelName"),
-                                rs.getBlob("ProductThumbnail"),
-                                rs.getBlob("ProductImage"),
+                                rs.getString("ProductThumbnail"),
+                                rs.getString("ProductImage"),
                                 rs.getBigDecimal("UnitCost"),
                                 rs.getInt("UnitQuantity"),
                                 rs.getString("Description")
@@ -213,8 +213,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                         rs.getString("ProductID"),
                         rs.getString("ModelNumber"),
                         rs.getString("ModelName"),
-                        rs.getBlob("ProductThumbnail"),
-                        rs.getBlob("ProductImage"),
+                        rs.getString("ProductThumbnail"),
+                        rs.getString("ProductImage"),
                         rs.getBigDecimal("UnitCost"),
                         rs.getInt("UnitQuantity"),
                         rs.getString("Description")

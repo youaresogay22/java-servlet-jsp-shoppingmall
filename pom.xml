@@ -10,6 +10,14 @@
     <name>shoppingmall</name>
     <packaging>war</packaging>
 
+    <repositories>
+        <repository>
+            <id>local repository</id>
+            <name>local repository</name>
+            <url>file://${project.basedir}/lib</url>
+        </repository>
+    </repositories>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>11</maven.compiler.target>
@@ -122,6 +130,12 @@
             <version>1.5</version>
         </dependency>
 
+        <!-- 상품관리 페이지 파일 업로드용 어쩌구 추가 2-->
+        <dependency>
+            <groupId>com.oreilly.servlet</groupId>
+            <artifactId>cos</artifactId>
+            <version>22.05</version>
+        </dependency>
     </dependencies>
 
     <build>

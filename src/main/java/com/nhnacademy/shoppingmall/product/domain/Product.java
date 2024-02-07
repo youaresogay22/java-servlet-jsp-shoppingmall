@@ -14,13 +14,13 @@ public class Product {
     private String productId;
     private String modelNumber;
     private String modelName;
-    private Blob productThumbNail;
-    private Blob productImage;
+    private String productThumbNail;
+    private String productImage;
     private BigDecimal unitCost;
     private int unitQuantity;
     private String description;
 
-    public Product(String productId, String modelNumber, String modelName, Blob productThumbNail, Blob productImage, BigDecimal unitCost, int unitQuantity, String description) {
+    public Product(String productId, String modelNumber, String modelName, String productThumbNail, String productImage, BigDecimal unitCost, int unitQuantity, String description) {
         this.productId = productId;
         this.modelNumber = modelNumber;
         this.modelName = modelName;
