@@ -1,0 +1,7 @@
+* 과거 모델 :
+
+image::oldmodels/shoppingmall_eer_model.PNG[]
+
+* 현재 모델:
+
+image::erd_change_0208.PNG[]

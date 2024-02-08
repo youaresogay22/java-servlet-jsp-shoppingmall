@@ -1,8 +1,13 @@
 = 쇼핑몰 프로젝트
 
-== ERD 변경사항 언젠가 수정 예정
+== 진행상황(02.08 / 14:46)
 
-* 진행상황(02.08 ? 11:44)
+* ERD 업데이트 완료
 
 image::docs/images/docs2.png[]
 image::docs/images/docs15.png[]
+
+== 자랑
+
+* link:src/main/java/com/nhnacademy/shoppingmall/user/pointdetail/domain/PointDetail.java[PointDetail.java]
+* enum 타입 사용해서 상황에 맞는 연산 가능
