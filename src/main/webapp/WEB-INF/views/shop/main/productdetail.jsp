@@ -13,13 +13,14 @@
 </head>
 <body>
 <h1>상품 상세 정보</h1>
-<h2>상품 ID: ${requestScope.}</h2>
-<h2>상품 번호: ${requestScope.}</h2>
-<h2>상품 이름: ${requestScope.}</h2>
-<h2>상품 썸네일 이미지: ${requestScope.}</h2>
-<h2>상품 상세보기 이미지: ${requestScope.}</h2>
-<h2>상품 가격: ${requestScope.user.}</h2>
-<h2>상품 재고: ${requestScope.user.}</h2>
-<h2>상품 상세설명: ${requestScope.}</h2>
+<h2>상품 ID: ${requestScope.product.getProductId()}</h2>
+<h2>상품 번호: ${requestScope.product.getModelNumber()}</h2>
+<h2>상품 이름: ${requestScope.product.getModelName()}</h2>
+<h2>상품 상세 이미지</h2>
+<img src="../${pageContext.request.contextPath}/resources/product_images/${requestScope.product.getProductImage()}">
+<h2>상품 가격: ${requestScope.product.getUnitCost()}</h2>
+<h2>상품 재고: ${requestScope.product.getUnitQuantity()}</h2>
+<h2>상품 상세설명:</h2>
+<p> ${requestScope.product.getDescription()}</p>
 </body>
 </html>

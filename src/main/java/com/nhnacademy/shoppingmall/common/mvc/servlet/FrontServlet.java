@@ -58,6 +58,7 @@ public class FrontServlet extends HttpServlet {
             }
         } catch (Exception e) {
             //todo#7-5 예외가 발생하면 해당 예외에 대해서 적절한 처리를 합니다.
+            //#todo error page에 실제 에러코드를 출력하도록 수정하면 좋을 것 같다.
             if (req.getAttribute(ERROR_STATUS_CODE) == null) {
                 req.setAttribute("status_code", "500");
             } else
@@ -68,6 +69,8 @@ public class FrontServlet extends HttpServlet {
             req.setAttribute("exception", req.getAttribute(ERROR_EXCEPTION));
             req.setAttribute("request_uri", req.getAttribute(ERROR_REQUEST_URI));
             log.error("status_code:{}", req.getAttribute(ERROR_STATUS_CODE));
+
+            DbConnectionThreadLocal.setSqlError(true);
 
             String layout = viewResolver.getLayOut("/error");
             log.debug("ERROR, layout :{}", layout);

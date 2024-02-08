@@ -28,11 +28,12 @@
                         <c:choose>
                             <c:when test="${not empty item.getProductThumbNail()}">
                                 <img src="../${pageContext.request.contextPath}/resources/thumbnails/${item.getProductThumbNail()}"
-                                     alt="${item.getProductThumbNail()}" width="100%" height="225">
+                                     alt="${item.getProductThumbNail()}" width="100%" height="225"
+                                     style="border-bottom:2px solid #222222">
                             </c:when>
                             <c:otherwise>
                                 <img src="../${pageContext.request.contextPath}/resources/no-image.png"
-                                     alt="no image" width="100%" height="225">
+                                     alt="no image" width="100%" height="225" style="border-bottom:2px solid #222222">
                             </c:otherwise>
                         </c:choose>
                             <%--                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"--%>
@@ -47,7 +48,8 @@
                             <p class="card-text">${item.getUnitCost()}원</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button onclick="location.href='productDetail.do'" type="button"
+                                    <button onclick="location.href='/productDetail.do?id=${item.getProductId()}'"
+                                            type="button"
                                             class="btn btn-sm btn-outline-secondary">상세보기
                                     </button>
                                 </div>

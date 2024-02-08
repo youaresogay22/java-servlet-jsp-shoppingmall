@@ -1,10 +1,19 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" trimDirectiveWhitespaces="true" session="false" %>
 
 <div style="margin: auto; width: 400px;">
     <div class="p-2">
         <form method="post" action="/loginAction.do">
 
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <c:choose>
+                <c:when test="${not empty requestScope.userInputError}">
+                    <h1 class="h3 mb-3 fw-normal" style="color: red">정보를 정확히 입력해 주세요</h1>
+                </c:when>
+
+                <c:otherwise>
+                    <h1 class="h3 mb-3 fw-normal">로그인하세요</h1>
+                </c:otherwise>
+            </c:choose>
 
             <div class="form-floating">
                 <input type="text" name="user_id" class="form-control" id="user_id" placeholder="회원 아이디" required>

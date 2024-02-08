@@ -62,18 +62,18 @@ public class LoginPostController implements BaseController {
         } catch (UserNotFoundException e) {
             log.debug("login execption");
             req.setAttribute("userInputError", "true");
-            return "/shop/main/index";
+            return "shop/login/login_form";
         }
     }
 
     private boolean isPointAddable(LocalDateTime latestloginat) {
-        //테스트 코드, 분단위 포인트 적립
-        LocalDateTime latestLoginAt = latestloginat.truncatedTo(ChronoUnit.MINUTES);
-        LocalDateTime now = LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.MINUTES);
+        //테스트 코드, 분당 1회 > 로그인당 1회씩 적립
+//        LocalDateTime latestLoginAt = latestloginat.truncatedTo(ChronoUnit.MINUTES);
+//        LocalDateTime now = LocalDateTime.now().plusMinutes(3).truncatedTo(ChronoUnit.MINUTES);
 
-//        LocalDateTime latestLoginAt = latestloginat.truncatedTo(ChronoUnit.DAYS);
-//        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
-        return latestloginat.isBefore(now);
+        LocalDateTime latestLoginAt = latestloginat.truncatedTo(ChronoUnit.DAYS);
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+        return latestLoginAt.isBefore(now);
     }
 }
 

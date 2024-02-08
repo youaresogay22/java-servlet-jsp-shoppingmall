@@ -47,8 +47,13 @@ public class PointChannelRequest extends ChannelRequest {
         log.debug("pointChannel execute");
         RequestContainer container = new RequestContainer(user, changeType, value);
 
-        ((UserServiceImpl) userService).updateUserPoint(container.getUser());
-        pointService.save(container.getPointDetail());
+        try {
+            ((UserServiceImpl) userService).updateUserPoint(container.getUser());
+            pointService.save(container.getPointDetail());
+        } catch (Exception e) {
+            //error 발생 시 커밋 롤백
+            DbConnectionThreadLocal.setSqlError(true);
+        }
 
         DbConnectionThreadLocal.reset();
     }
