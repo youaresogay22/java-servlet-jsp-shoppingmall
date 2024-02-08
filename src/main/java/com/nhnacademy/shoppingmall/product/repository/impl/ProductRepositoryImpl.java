@@ -34,7 +34,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             psmt.setString(5, product.getProductImage());
             psmt.setBigDecimal(6, product.getUnitCost());
             psmt.setInt(7, product.getUnitQuantity());
-            psmt.setString(8, product.getProductId());
+            //02.08 수정: produdtID 삽입되고 있던 문제 수정
+            psmt.setString(8, product.getDescription());
             log.debug("save sql:{}", psmt);
 
             return psmt.executeUpdate();
@@ -58,8 +59,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             psmt.setString(3, product.getProductThumbNail());
             psmt.setString(4, product.getProductImage());
             psmt.setBigDecimal(5, product.getUnitCost());
-            psmt.setString(6, product.getDescription());
-            psmt.setInt(7, product.getUnitQuantity());
+            psmt.setInt(6, product.getUnitQuantity());
+            psmt.setString(7, product.getDescription());
             psmt.setString(8, product.getProductId());
             log.debug("update sql:{}", psmt);
 

@@ -19,7 +19,7 @@ public class IndexController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         //String category = req.getParameter("category");
-        String page_temp = req.getParameter("page");
+        String page_temp = req.getParameter("page_temp");
 
         setListAttribute(page_temp, req);
 

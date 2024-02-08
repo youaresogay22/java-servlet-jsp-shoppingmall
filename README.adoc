@@ -1,4 +1,8 @@
 = 쇼핑몰 프로젝트
 
-* 켁븜
-* ERD 변경사항 추후 수정 예정
+== ERD 변경사항 언젠가 수정 예정
+
+* 진행상황(02.08 ? 11:44)
+
+image::docs/images/docs2.png[]
+image::docs/images/docs15.png[]

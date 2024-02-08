@@ -2,6 +2,7 @@ package com.nhnacademy.shoppingmall.controller.auth;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.thread.request.impl.PointChannelRequest;
 import com.nhnacademy.shoppingmall.user.domain.User;
@@ -54,15 +55,15 @@ public class LoginPostController implements BaseController {
                     log.debug("point add execption");
                     throw new RuntimeException(e);
                 }
-
                 return "/shop/main/index";
-            }
+
+                //02.08 수정: 로그인 에러 처리 수정(기존: 500에러 출력>현재 로그인 메시지 출력)
+            } else throw new UserNotFoundException(id);
         } catch (UserNotFoundException e) {
             log.debug("login execption");
-            throw new UserNotFoundException("id");
+            req.setAttribute("userInputError", "true");
+            return "/shop/main/index";
         }
-
-        return "redirect:/login.do";
     }
 
     private boolean isPointAddable(LocalDateTime latestloginat) {

@@ -9,6 +9,10 @@
                     <h1 class="h3 mb-3 fw-normal" style="color: red">존재하는 상품 id 입니다.</h1>
                 </c:when>
 
+                <c:when test="${not empty requestScope.productSaveError}">
+                    <h1 class="h3 mb-3 fw-normal" style="color: red">파일 업로드 중 오류가 발생했습니다.</h1>
+                </c:when>
+
                 <c:when test="${not empty requestScope.saveSucceed}">
                     <h1 class="h3 mb-3 fw-normal" style="color: blue">등록하였습니다.</h1>
                 </c:when>
