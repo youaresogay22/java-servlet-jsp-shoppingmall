@@ -1,6 +1,5 @@
 package com.nhnacademy.shoppingmall.entity;
 
-import com.nhnacademy.shoppingmall.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

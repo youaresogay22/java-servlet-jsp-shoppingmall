@@ -37,7 +37,7 @@ public class users {
     private int userPoint;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime atCreated;
 
     @Column(name = "latest_login_at")
     private LocalDateTime latestLoginAt;

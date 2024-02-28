@@ -11,17 +11,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-@IdClass(OrderDetails.PrimaryKey.class)
 public class OrderDetails {
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "OrderID")
-    private Orders order;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "ProductID")
-    private Products product;
+    @EmbeddedId
+    private PrimaryKey primaryKey;
 
     private int Quantity;
 
@@ -32,8 +24,14 @@ public class OrderDetails {
     @EqualsAndHashCode
     @Getter
     @Setter
+    @Embeddable
     public static class PrimaryKey implements Serializable {
-        private int OrderID;
-        private String ProductID;
+        @ManyToOne
+        @JoinColumn(name = "OrderID")
+        private Orders order;
+
+        @ManyToOne
+        @JoinColumn(name = "ProductID")
+        private Products product;
     }
 }
